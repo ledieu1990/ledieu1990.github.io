@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>SQL Optimization: Tips &amp; Tricks - Le D.&#39;s Blog</title>
+  <meta name="description" content="SQL (Structured Query Language) is a very common language and an essential tool used in day-to-day work of developers, data engineers and data analysts, data scientists… who want to interact with relational databases. Therefore, using SQL optimally is a great skill and a must-know technique. It could benefit us both time and money.
+In this article, I would like to share with you who are interested in SQL in general and SQL optimization in particular some tips and tricks for SQL optimization."><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "Le D.\u0027s Blog",
+    
+    "url": "https:\/\/ledieu1990.github.io\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/ledieu1990.github.io\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/ledieu1990.github.io\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/ledieu1990.github.io\/posts\/sql_optimization_tips_tricks\/",
+          "name": "SQL optimization tips \u0026 tricks"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : "Le D."
+  },
+  "headline": "SQL Optimization: Tips \u0026 Tricks",
+  "description" : "SQL (Structured Query Language) is a very common language and an essential tool used in day-to-day work of developers, data engineers and data analysts, data scientists… who want to interact with relational databases. Therefore, using SQL optimally is a great skill and a must-know technique. It could benefit us both time and money.\nIn this article, I would like to share with you who are interested in SQL in general and SQL optimization in particular some tips and tricks for SQL optimization.",
+  "inLanguage" : "en",
+  "wordCount":  2557 ,
+  "datePublished" : "2022-06-30T22:10:42",
+  "dateModified" : "2022-06-30T22:10:42",
+  "image" : "https:\/\/ledieu1990.github.io\/",
+  "keywords" : [ "SQL, SQL Optimization, Relational database" ],
+  "mainEntityOfPage" : "https:\/\/ledieu1990.github.io\/posts\/sql_optimization_tips_tricks\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/ledieu1990.github.io\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/ledieu1990.github.io\/",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="SQL Optimization: Tips &amp; Tricks" />
+<meta property="og:description" content="SQL (Structured Query Language) is a very common language and an essential tool used in day-to-day work of developers, data engineers and data analysts, data scientists… who want to interact with relational databases. Therefore, using SQL optimally is a great skill and a must-know technique. It could benefit us both time and money.
+In this article, I would like to share with you who are interested in SQL in general and SQL optimization in particular some tips and tricks for SQL optimization.">
+<meta property="og:url" content="https://ledieu1990.github.io/posts/sql_optimization_tips_tricks/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Le D.&#39;s Blog" />
+
+  <meta name="twitter:title" content="SQL Optimization: Tips &amp; Tricks" />
+  <meta name="twitter:description" content="SQL (Structured Query Language) is a very common language and an essential tool used in day-to-day work of developers, data engineers and data analysts, data scientists… who want to interact with …">
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="generator" content="Hugo 0.101.0" />
+  <link rel="alternate" href="https://ledieu1990.github.io/index.xml" type="application/rss+xml" title="Le D.&#39;s Blog"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://ledieu1990.github.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="https://ledieu1990.github.io/css/syntax.css" /><link rel="stylesheet" href="https://ledieu1990.github.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://ledieu1990.github.io/">Le D.&#39;s Blog</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>SQL Optimization: Tips &amp; Tricks</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>        SQL (Structured Query Language) is a very common language and an essential tool used in day-to-day work of developers, data engineers and data analysts, data scientists… who want to interact with relational databases. Therefore, using SQL optimally is a great skill and a must-know technique. It could benefit us both time and money.</p>
+<p>        In this article, I would like to share with you who are interested in SQL in general and SQL optimization in particular some tips and tricks for SQL optimization. My writing includes 5 parts:</p>
+<ul>
+<li>Why do we need to know about SQL Optimization techniques?</li>
+<li>Prerequisite</li>
+<li>Tips and tricks</li>
+<li>Conclusion</li>
+<li>Preferences</li>
+</ul>
+<p>        <strong>Disclaimer</strong>: I write this article based on experiences that I had when working as data analyst at Home Credit Vietnam as well as data engineer at FPT Software currently. If you guys think there are some parts not correct or need to be improved or added, all feedback is welcome.</p>
+<p> </p>
+<h3 id="why-do-we-need-to-know-about-sql-optimization-techniques">Why do we need to know about SQL Optimization techniques?</h3>
+<p>        SQL Optimization are techniques that helps us to write effective queries to improve performance. One of the clearest benefit the optimization brings that we can see immediately is that the time we run queries down significantly so we don’t need to wait for long time to get the data. Another advantage is that we could save the money for the company as we run less expensive queries. Running any query costs resources such as disk I/O, memory… Therefore, writing and running an optimized query are essential.
+ </p>
+<h3 id="prerequisite">Prerequisite</h3>
+<p>        Readers should be familiar with SQL syntaxes or at least have basic SQL knowledge. If you don’t, I recommend you could take 2 courses below in addition to lots of very good resources you can find on the internet:</p>
+<ul>
+<li><a href="https://www.sqlteaching.com/">sqlteaching</a> : in this tutorial, you can acquire basic SQL syntax  with practical tests and you can check your knowledge immediately.</li>
+<li><a href="https://www.codecademy.com/learn/learn-sql">codecademy</a> : there are few tutorials related to SQL in this site and they help you level up your SQL skills.</li>
+</ul>
+<p>Also, all examples in this article follow the SQL Server syntax.
+ </p>
+<h3 id="tips-and-tricks">Tips and tricks</h3>
+<h4 id="get-acquainted-with-system-tables">Get acquainted with system tables</h4>
+<p>        As I know, almost relational databases have tables/views to manage metadata of their all objects (tables, views, stored procedures, jobs, etc…). For instance, in SQL Server, there are tables such as sys.tables, sys.objects, sys.indexes, sys.schemas… that store metadata of all objects. Knowing these tables is essential. They could help us have primary understanding about tables/views… When an object is created, when it is modified, how many rows a table has, which columns in a table are primary key or indexed… They are very helpful when we make optimized queries. Also, we could use these system tables for searching. One of advantage that I get most is searching tables/views used in which stored procedures.</p>
+<p>        For instance, the query below is used to find whether a table has any indexes and what they are:
+<img src="../../sql_optimization_tips_tricks/sys_tables.png" alt="sys_tables">
+ </p>
+<h4 id="dry-dont-repeat-yourself">DRY (Don’t repeat yourself)</h4>
+<p>        This principle is not only applied in writing an optimal SQL query but also applied in any coding practice in any language. If your query has may parts in which code repeats again and again, we should not ignore or suffer running this kind of query, we should stop it there and figure out how to optimize it. If you ask the machine work on the same or mostly similar task multiple times, it also feels tired and bored. Sometimes it could make a strike ^_^ (the query could run forever until we stop it without any desired data or perhaps we would take long time to get what we desire).</p>
+<p>        For instance:</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/DRY_no.png" alt="DRY_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/DRY_yes.png" alt="DRY_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="limit-data-you-need-as-much-as-possible">Limit data you need as much as possible</h4>
+<p>        In my opinion, this rule is important. We only get enough data we need, no more. This rule is quite helpful, especially for transactional/fact tables with millions or even billions of records. Mostly, I used date-time columns to limit my data. Almost these tables have date-time columns which we can use to filter our desired data. Given these date-time columns have proper indexes/partitions, the machine has its own way to filter the data very quickly instead of it is forced to retrieve all data in huge tables. I use date-time columns in this example because it’s quite straight-forward to understand, however the rule also applies for other columns with different data types as long as they have proper indexes or partitions. We can use system tables (mentioned in tip 1) to find out whether columns in the table have proper indexes/partitions. If yes, that would be over the moon. If not and we know we will use these columns frequently later in queries, we should raise the voice to have it done. In case we have the right to do it, we could consider to apply proper indexes or partitions so that we can use in queries then. For instance, when we only need a data from 01/01/2022 to 31/01/2022:</p>
+<p>        For instance, if we only want to retrieve data from 01/01/2022 to 31/01/2022:</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/limit_data_no.png" alt="limit_data_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/limit_data_yes.png" alt="limit_data_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="respect-data-types">Respect data types</h4>
+<p>        Some people just put values to filter data in WHERE statement in single quote (that means the value is a string) all over the time without knowing what exact data type of these column they use. Certainly, it’s not a good practice. In fact, when we run such query but the data type of a column different from string type (varchar, nvarchar…), the machine will implicitly convert all data in the column to string and make a filter or comparison then. It causes a burden when it requires more resources to execute the implicit conversion. So it’s better that we know metadata of objects and input values with data types as the same as the columns’ data types. The system tables mentioned in tip 1 will help to find metadata about data types that we need.</p>
+<p>        For instance, TRANSACTION_DATE has data type of “date”, then we should convert inputs to date as well.</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/data_type_no.png" alt="data_type_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/data_type_yes.png" alt="data_type_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="avoid-using-select-">Avoid using SELECT *</h4>
+<p>        You might think SELECT * is very convenient and time-saving, right? It probably yes or no. The answer is yes as it’s straight-forward, just few letters are typed. The answer is no when we think about optimization and readability. Imagine that we have a table with a hundred columns and SELECT * means we would get all data for a hundred of columns. However, in fact, we only need data for few columns. Compare retrieving data for 100 columns versus 10 columns, which one is faster? The machine needs to work harder in case of SELECT *. Also, specifying exact columns in SELECT statement helps to increase the readability. We know exactly what we need when we or our colleagues come back to the current work later.</p>
+<p>        For instance, we should list down all needed columns in TRANSACTION_FACT instead of using *:</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/select_star_no.png" alt="select_star_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/select_star_yes.png" alt="select_star_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="use-alias">Use alias</h4>
+<p>        Together with specifying exact columns in SELECT statements, in case our queries are a bit complicated with multiple JOIN/LEFT JOIN statements, giving aliases for all columns could bring us benefits of readability and optimization. When adding aliases, the machine doesn’t need to guess which column belong to which table (like humans) so a query could run faster.</p>
+<p>        For instance, we should list down all needed columns in TRANSACTION_FACT instead of using *:</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/alias_no.png" alt="alias_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/alias_yes.png" alt="alias_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="use-indexedpartitioned-columns-in-wherejoin-statements-if-possible">Use indexed/partitioned columns in WHERE/JOIN statements if possible</h4>
+<p>        Its benefit is pretty straight-forward. I don’t tell you more details about indexes, partitions in this article, you can find many good resources on google talking about them. I just would like to say that we should use the columns which are indexed or partitioned in WHERE/JOIN if possible. Queries run faster.</p>
+<p> </p>
+<h4 id="use-left-join-instead-of-where--not-in--join-instead-of-where--in">Use LEFT JOIN instead of WHERE … NOT IN …, JOIN instead of WHERE … IN…</h4>
+<p>        In case the list of values you want to filter in/out is short with few values, it’s okay to use IN/NOT IN. However, if we would like to filter with many values like more than a thousand, using JOIN/LEFT JOIN is better. Because the optimizer (you can find out more on the optimizer (Oracle) <a href="https://docs.oracle.com/database/121/TGSQL/tgsql_optcncpt.htm#TGSQL193">here</a>) has different execution plans (more <a href="https://en.wikipedia.org/wiki/Query_plan">details</a>) for executing a query, JOIN/LEFT JOIN is more effective.</p>
+<p>        For instance:</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/join_no.png" alt="join_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/join_yes.png" alt="join_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="avoid-over-using-select-distinct">Avoid over-using SELECT DISTINCT</h4>
+<p>        SELECT DISTINCT statement is more expensive than a normal SELECT statement when the machine has to do another step to get unique records. Therefore, we should understand our tables and data to use DISTINCT in appropriate situations. Getting duplicated data is not always bad as it could help us to find out issues in tables we use in the query.</p>
+<p>        For instance, CUSTOMER_ID is unique as it’s a primary key in the table CUSTOMER_DIM, therefore data retrieved without DISTINCT is unique. It’s not necessary to use DISTINCT in this case.</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/distinct_no.png" alt="distinct_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/distinct_yes.png" alt="distinct_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="avoid-using-unnecessary-functions-in-wherejoins">Avoid using unnecessary functions in WHERE/JOINs</h4>
+<p>        Applying functions in any columns means the machine need to take more resources to execute these transformations, especially functions in WHERE/ JOIN conditions when it needs to apply functions first and then execute filters or joins. Once again, I believe that we should have knowledge on tables we use in the query to apply functions in appropriate situations. Don’t use them when it’s not really necessary.</p>
+<p>        For instance, we would like to get data for new customers created from 01/01/2022 to 31/01/2022 but we have CREATED_DATETIME’ s data type as datetime. Intuitively, we would like to convert CREATED_DATETIME to date for easy comparison but it’s not necessary.</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/function_no.png" alt="function_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/function_yes.png" alt="function_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="avoid-using-leftright-join-if-not-necessary">Avoid using LEFT/RIGHT JOIN if not necessary</h4>
+<p>        Some people use LEFT JOIN (RIGHT JOIN is similar to LEFT JOIN except different direction of 2 tables) all over the time. Perhaps they want to make sure they definitely don’t lose any data in the base table (the table after FROM keyword). It causes a burden as the machine needs to work harder. LEFT/RIGHT JOINs are more expensive than INNER JOINs. Therefore, similar to 2 tips I just mentioned, we should have knowledge on tables you use in the query to use different JOIN types in proper situations.</p>
+<p>        For instance, naturally CUSTOMER_ID could not be null in TRANSACTION_FACT (each transaction need to go along with a customer) and it’s a primary key in CUSTOMER_DIM. Therefore, they are no cases in which a CUSTOMER_ID doesn’t exist in CUSTOMER_DIM  we should use INNER JOIN.</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/left_join_no.png" alt="left_join_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/left_join_yes.png" alt="left_join_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="distinct-versus-group-by-are-not-good-friends-to-each-other">DISTINCT versus GROUP BY are not good friends to each other</h4>
+<p>        In fact, the GROUP BY statement already makes data unique based on columns we specify in SELECT and then calculate aggregation functions on those distinct data. Therefore, we don’t need to use DISTINCT in your GROUP BY queries. We have to avoid this situation.</p>
+<p>        For instance, we would like to get the revenue for each product category which products were sold from 01/01/2022 to 31/01/2022:</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/distinct_agg_no.png" alt="distinct_agg_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/distinct_agg_yes.png" alt="distinct_agg_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="use-union-all-instead-of-union-if-possible">Use UNION ALL instead of UNION if possible</h4>
+<p>        After we understand our data and we are sure that the data from all smaller queries before concatenating them together are unique, we don’t need to use UNION anymore. UNION is more expensive than UNION ALL when the machine need to do one more step to distinct your data. So, we have to avoid using UNION all the time.</p>
+<p>        For instance, we would like to know retail sales from both shops and e-commerce for a retail company. Sales from different channels are certainly not duplicated to each other. Therefore, it’s not necessary to use UNION in this case.</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/union_no.png" alt="union_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/union_yes.png" alt="union_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="use-toplimit-if-you-just-want-to-view-the-sample-data">Use TOP/LIMIT if you just want to view the sample data</h4>
+<p>        As I know, for some relational database management systems (RDBMS) like Oracle, the default of 50 records are retrieved when you run a query but other RDBMS like SQL Server, all records are retrieved if we run SELECT … without any limitation. That causes the machine needs to take more resources to get the task done. Therefore, in case we just need to view few rows of data for reference, specifying TOP/LIMIT to get only sample data is essential. TOP/LIMIT or other keywords depend on RDBMS we are using so we can reference to their documents for proper syntaxes.</p>
+<p>        For instance, we only want to view the TRANSACTION_FACT’s sample data:</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/top_no.png" alt="top_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/top_yes.png" alt="top_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="avoid-always-using-wildcard-at-the-beginning-of-searched-phrase">Avoid always using wildcard at the beginning of searched phrase</h4>
+<p>        Some people want to use one type of searching syntax to apply for all cases by putting a search keyword between 2 percentage signs like this ‘%searched_keyword%’. It seems pretty convenient and we never miss any desired data. However, as you might know, searching with % at the beginning of searched phrase is more expensive than searching by an exact character at the beginning. Therefore, we need to understand exactly what data we expect to get in order to avoid using wildcard at the beginning all the time.</p>
+<p>        For instance, we would like to search values which start with “Resolved” in the table CUSTOMER_FEEDBACK_FACT’s NOTE column:</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/wildcard_no.png" alt="wildcard_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/wildcard_yes.png" alt="wildcard_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="avoid-using-hints">Avoid using hints</h4>
+<p>        Using hints (more details about hints (SQL Server) can be found <a href="https://docs.microsoft.com/en-us/sql/t-sql/queries/hints-transact-sql?view=sql-server-ver16">here</a>) is a topic that I used to be much interested in. In my opinion, this knowledge is an advanced topic and not easy to understand. Basically, when we run a query without any hints, the optimizer will analyze our query and make an execution plan to run the query in the most effective way. Everything is automatic and behind the scene. However, when we use hints in our query, the optimizer will use these hints to make execution plan. It just does what we guide it. Thus, if we give it proper hints, our query will be executed faster and more effectively. Otherwise, if we give it bad hints, the opposite result happens. Therefore, we need to be careful when using hints and make sure we understand what we use. It’s better to view the execution plan before applying hints. Bad hints are worse than no hints.</p>
+<p> </p>
+<h4 id="gather-statistics-rebuild-indexes">Gather statistics, rebuild indexes</h4>
+<p>        When we insert/update/delete data in a table, its metadata will be changed constantly. Therefore, gathering statistics and rebuilding indexes help to recalculate metadata (such as number of rows, number of columns…) and rebuild indexes on columns up-to-date. That helps the optimizer to analyze metadata more accurately and then have a more effective execution plan. Thus, our queries will be run faster.</p>
+<p> </p>
+<h4 id="avoid-large-queries">Avoid large queries</h4>
+<p>        A query with too many JOIN statements, especially LEFT/RIGHT JOINs would take much resources to execute. Therefore, it’s better to avoid such situations. First of all, we should review whether all tables need to be involved and then exclude unnecessary tables. And after that if it’s still big, we can consider to split your query into multiple queries by inserting into different temporary tables as well as we can consider other optimization techniques. It depends on various situations.</p>
+<p>        For instance, a query with multiple left joins at once could be split into few queries under temporary tables.</p>
+<table>
+<thead>
+<tr>
+<th><img src="../../sql_optimization_tips_tricks/red_cross.png" alt="red_cross"></th>
+<th><img src="../../sql_optimization_tips_tricks/green_tick.png" alt="green_tick"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="../../sql_optimization_tips_tricks/large_queries_no.png" alt="large_queries_no"></td>
+<td><img src="../../sql_optimization_tips_tricks/large_queries_yes.png" alt="large_queries_yes"></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<h4 id="stop-executing-long-run-queries">Stop executing long-run queries</h4>
+<p>        The rule of thumb is that it’s better to stop or cancel our query if its running time reaches <strong>15 minutes</strong> and it continues running. We should stop and try to optimize it before we run it again.</p>
+<p> </p>
+<h3 id="conclusion">Conclusion</h3>
+<p>        In this article, I introduce you some tips and tricks for SQL optimization. I tried to cover all things that I have with my working experience and I believe we can utilize them in our studying or working with SQL. I hope this article is helpful and I welcome all of your feedback.</p>
+<p>        Thank you for reading and have a great day!
+ </p>
+<h3 id="references">References</h3>
+<ul>
+<li><a href="https://blog.devart.com/how-to-optimize-sql-query.html">https://blog.devart.com/how-to-optimize-sql-query.html</a></li>
+<li><a href="https://blogs.halodoc.io/learning-query-optimization-techniques/">https://blogs.halodoc.io/learning-query-optimization-techniques/</a></li>
+<li><a href="https://www.sqlshack.com/query-optimization-techniques-in-sql-server-tips-and-tricks/">https://www.sqlshack.com/query-optimization-techniques-in-sql-server-tips-and-tricks/</a></li>
+</ul>
+
+
+        
+          <div class="blog-tags">
+            
+              <a href="https://ledieu1990.github.io//tags/sql/">SQL</a>&nbsp;
+            
+              <a href="https://ledieu1990.github.io//tags/sql-optimization/">SQL Optimization</a>&nbsp;
+            
+              <a href="https://ledieu1990.github.io//tags/relational-database/">Relational database</a>&nbsp;
+            
+          </div>
+        
+
+        
+
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+          
+        </ul>
+      
+
+
+      
+
+    </div>
+  </div>
+</div>
+
+      
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2022
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://ledieu1990.github.io/">Le D.&#39;s Blog</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.101.0</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://ledieu1990.github.io/js/main.js"></script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://ledieu1990.github.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+    
+  </body>
+</html>
+

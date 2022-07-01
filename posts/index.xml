@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Le D.&#39;s Blog</title>
+    <link>https://ledieu1990.github.io/posts/</link>
+    <description>Recent content in Posts on Le D.&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 30 Jun 2022 22:10:42 +0700</lastBuildDate><atom:link href="https://ledieu1990.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SQL Optimization: Tips &amp; Tricks</title>
+      <link>https://ledieu1990.github.io/posts/sql_optimization_tips_tricks/</link>
+      <pubDate>Thu, 30 Jun 2022 22:10:42 +0700</pubDate>
+      
+      <guid>https://ledieu1990.github.io/posts/sql_optimization_tips_tricks/</guid>
+      <description>SQL (Structured Query Language) is a very common language and an essential tool used in day-to-day work of developers, data engineers and data analysts, data scientists… who want to interact with relational databases. Therefore, using SQL optimally is a great skill and a must-know technique. It could benefit us both time and money.
+In this article, I would like to share with you who are interested in SQL in general and SQL optimization in particular some tips and tricks for SQL optimization.</description>
+    </item>
+    
+  </channel>
+</rss>
